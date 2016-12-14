@@ -14,6 +14,7 @@ RUN apk-install openssl-dev pcre-dev zlib-dev wget build-base nano && \
         --with-http_gzip_static_module \
         --with-http_v2_module \
         --with-http_realip_module \
+        --with-stream \
         --prefix=${NGINX_HOME} \
         --conf-path=/etc/nginx/nginx.conf \
         --http-log-path=/var/log/nginx/access.log \
