@@ -9,6 +9,7 @@ RUN apk-install openssl-dev pcre-dev zlib-dev wget build-base nano && \
     curl -Ls http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar -xz -C /tmp && \
     cd /tmp/nginx-${NGINX_VERSION} && \
     ./configure \
+        --with-debug \
         --with-ipv6 \
         --with-http_ssl_module \
         --with-http_gzip_static_module \
