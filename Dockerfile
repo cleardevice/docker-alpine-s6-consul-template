@@ -3,9 +3,12 @@ FROM cleardevice/docker-alpine-s6-consul-template
 MAINTAINER cd <cleardevice@gmail.com>
 
 # Nginx version
-ENV NGINX_VERSION=1.13.6 NGINX_HOME=/usr/share/nginx
+ENV NGINX_VERSION=1.13.6 NGINX_HOME=/usr/share/nginx REDIS_NGINX_MODULE=0.3.9
 
-RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev libpcre3-dev && \
+RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev && \
+    # redis-nginx-module
+    curl -Ls https://github.com/onnimonni/redis-nginx-module/archive/v${REDIS_NGINX_MODULE}.tar.gz | tar -xz -C /tmp && \
+    # nginx
     curl -Ls http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar -xz -C /tmp && \
     cd /tmp/nginx-${NGINX_VERSION} && \
     ./configure \
@@ -17,6 +20,7 @@ RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev libpcre3-dev 
         --with-http_realip_module \
         --with-stream \
         --with-stream_ssl_preread_module \
+        --add-module=/tmp/redis-nginx-module-${REDIS_NGINX_MODULE} \
         --prefix=${NGINX_HOME} \
         --conf-path=/etc/nginx/nginx.conf \
         --http-log-path=/var/log/nginx/access.log \
