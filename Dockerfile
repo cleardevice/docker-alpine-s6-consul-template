@@ -3,9 +3,9 @@ FROM cleardevice/docker-alpine-s6-consul-template
 MAINTAINER cd <cleardevice@gmail.com>
 
 # Nginx version
-ENV NGINX_VERSION=1.13.5 NGINX_HOME=/usr/share/nginx
+ENV NGINX_VERSION=1.13.6 NGINX_HOME=/usr/share/nginx
 
-RUN apk-install openssl-dev pcre-dev zlib-dev wget build-base nano && \
+RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev libpcre3-dev && \
     curl -Ls http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz | tar -xz -C /tmp && \
     cd /tmp/nginx-${NGINX_VERSION} && \
     ./configure \
