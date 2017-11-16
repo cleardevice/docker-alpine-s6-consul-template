@@ -5,7 +5,11 @@ MAINTAINER cd <cleardevice@gmail.com>
 # Nginx version
 ENV NGINX_VERSION=1.13.6 NGINX_HOME=/usr/share/nginx REDIS_NGINX_MODULE=0.3.9
 
-RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev && \
+RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev git autoconf automake libtool && \
+    cd /tmp && git clone https://github.com/google/ngx_brotli.git && \
+    cd /tmp/ngx_brotli && git submodule update --init && \
+    cd /tmp && git clone https://github.com/bagder/libbrotli.git && \
+    cd /tmp/libbrotli && ./autogen.sh && ./configure && make && \
     # redis-nginx-module
     curl -Ls https://github.com/onnimonni/redis-nginx-module/archive/v${REDIS_NGINX_MODULE}.tar.gz | tar -xz -C /tmp && \
     # nginx
@@ -21,6 +25,7 @@ RUN apk-install wget nano build-base openssl-dev zlib-dev pcre-dev && \
         --with-stream \
         --with-stream_ssl_preread_module \
         --add-module=/tmp/redis-nginx-module-${REDIS_NGINX_MODULE} \
+        --add-module=/tmp/ngx_brotli \
         --prefix=${NGINX_HOME} \
         --conf-path=/etc/nginx/nginx.conf \
         --http-log-path=/var/log/nginx/access.log \
